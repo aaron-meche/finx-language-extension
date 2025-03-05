@@ -1,0 +1,173 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Finx",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#imports"
+		},
+		{
+			"include": "#definitions"
+		},
+		{
+			"include": "#function-calls"
+		},
+		{
+			"include": "#instantiations"
+		},
+		{
+			"include": "#actions"
+		},
+		{
+			"include": "#variable-references"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.finx",
+					"match": "//.*$"
+				}
+			]
+		},
+		"imports": {
+			"patterns": [
+				{
+					"name": "keyword.control.finx",
+					"match": "\\bimport\\b"
+				},
+				{
+					"name": "entity.name.namespace.finx",
+					"match": "(?<=import\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*(?:as|from|\\s*$))"
+				},
+				{
+					"name": "keyword.control.finx",
+					"match": "\\b(as|from)\\b"
+				},
+				{
+					"name": "entity.name.alias.finx",
+					"match": "(?<=as\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+				},
+				{
+					"name": "string.quoted.single.finx",
+					"begin": "'",
+					"end": "'",
+					"patterns": [
+						{
+							"name": "constant.character.escape.finx",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.double.finx",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.finx",
+							"match": "\\\\."
+						}
+					]
+				}
+			]
+		},
+		"definitions": {
+			"patterns": [
+				{
+					"name": "keyword.control.finx",
+					"match": "\\bdef\\b"
+				},
+				{
+					"name": "variable.name.finx",
+					"match": "(?<=def\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*=)"
+				}
+			]
+		},
+		"function-calls": {
+			"patterns": [
+				{
+					"name": "entity.name.function.finx",
+					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*\\()"
+				}
+			]
+		},
+		"instantiations": {
+			"patterns": [
+				{
+					"name": "keyword.control.new.finx",
+					"match": "\\bnew\\b"
+				},
+				{
+					"name": "entity.name.type.finx",
+					"match": "(?<=new\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*\\()"
+				}
+			]
+		},
+		"actions": {
+			"patterns": [
+				{
+					"name": "variable.other.object.finx",
+					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\.)"
+				},
+				{
+					"begin": "(?<=\\b[A-Za-z_][A-Za-z0-9_]*\\s*)\\.\\b[A-Za-z_][A-Za-z0-9_]*\\b",
+					"end": "\\(",
+					"beginCaptures": {
+						"0": {
+							"patterns": [
+								{
+									"name": "punctuation.accessor.finx",
+									"match": "\\."
+								},
+								{
+									"name": "entity.name.function.finx",
+									"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+								}
+							]
+						}
+					},
+					"patterns": [
+						{
+							"name": "punctuation.accessor.finx",
+							"match": "\\."
+						},
+						{
+							"name": "entity.name.function.finx",
+							"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+						}
+					]
+				}
+			]
+		},
+		"variable-references": {
+			"patterns": [
+				{
+					"name": "variable.other.finx",
+					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?![\\s]*[\\(\\.])"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.double.finx",
+					"begin": "\"",
+					"end": "\""
+				},
+				{
+					"name": "string.quoted.single.finx",
+					"begin": "'",
+					"end": "'"
+				}
+			]
+		}
+	},
+	"scopeName": "source.finx"
+}
