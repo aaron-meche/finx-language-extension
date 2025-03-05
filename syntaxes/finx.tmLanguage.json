@@ -6,10 +6,16 @@
 			"include": "#comments"
 		},
 		{
+			"include": "#keywords"
+		},
+		{
 			"include": "#imports"
 		},
 		{
 			"include": "#definitions"
+		},
+		{
+			"include": "#function-declarations"
 		},
 		{
 			"include": "#function-calls"
@@ -36,6 +42,34 @@
 				}
 			]
 		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.finx",
+					"match": "\\b(if|else|else\\sif)\\b"
+				},
+				{
+					"name": "constant.language.null.finx",
+					"match": "\\bnull\\b"
+				},
+				{
+					"name": "constant.language.undefined.finx",
+					"match": "\\bundefined\\b"
+				},
+				{
+					"name": "constant.language.nan.finx",
+					"match": "\\bNaN\\b"
+				},
+				{
+					"name": "constant.language.infinity.finx",
+					"match": "\\bInfinity\\b"
+				},
+				{
+					"name": "constant.language.abort.finx",
+					"match": "\\bAbort\\b"
+				}
+			]
+		},
 		"imports": {
 			"patterns": [
 				{
@@ -53,28 +87,6 @@
 				{
 					"name": "entity.name.alias.finx",
 					"match": "(?<=as\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b"
-				},
-				{
-					"name": "string.quoted.single.finx",
-					"begin": "'",
-					"end": "'",
-					"patterns": [
-						{
-							"name": "constant.character.escape.finx",
-							"match": "\\\\."
-						}
-					]
-				},
-				{
-					"name": "string.quoted.double.finx",
-					"begin": "\"",
-					"end": "\"",
-					"patterns": [
-						{
-							"name": "constant.character.escape.finx",
-							"match": "\\\\."
-						}
-					]
 				}
 			]
 		},
@@ -82,21 +94,72 @@
 			"patterns": [
 				{
 					"name": "keyword.control.finx",
-					"match": "\\bdef\\b"
+					"match": "\\b(def|fin)\\b"
 				},
 				{
 					"name": "variable.name.finx",
-					"match": "(?<=def\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*=)"
+					"match": "(?<=def\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=:)"
+				},
+				{
+					"name": "constant.name.finx",
+					"match": "(?<=fin\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=:)"
+				},
+				{
+					"name": "support.type.finx",
+					"match": "(?<=(def|fin)\\s+\\b[A-Za-z_][A-Za-z0-9_]*:\\s+)\\b[A-Z][A-Za-z0-9_]*\\b(?=\\s=)"
+				}
+			]
+		},
+		"function-declarations": {
+			"patterns": [
+				{
+					"name": "keyword.control.finx",
+					"match": "\\bfunc\\b"
+				},
+				{
+					"name": "support.type.finx",
+					"match": "(?<=func\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s+[A-Za-z_][A-Za-z0-9_]*\\s*\\()"
+				},
+				{
+					"name": "entity.name.function.finx",
+					"match": "(?<=func\\s+[A-Za-z_][A-Za-z0-9_]*\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*\\()"
+				},
+				{
+					"begin": "\\(",
+					"end": "\\)",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.parameters.begin.finx"
+						}
+					},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.parameters.end.finx"
+						}
+					},
+					"patterns": [
+						{
+							"name": "support.type.finx",
+							"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s+[A-Za-z_][A-Za-z0-9_]*\\b(?:\\s*,|\\s*\\)))"
+						},
+						{
+							"name": "variable.parameter.finx",
+							"match": "(?<=\\b[A-Za-z_][A-Za-z0-9_]*\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*(?:,|\\)))"
+						},
+						{
+							"name": "punctuation.separator.finx",
+							"match": ","
+						}
+					]
+				},
+				{
+					"name": "punctuation.definition.block.begin.finx",
+					"match": "{"
 				}
 			]
 		},
 		"function-calls": {
-			"patterns": [
-				{
-					"name": "entity.name.function.finx",
-					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*\\()"
-				}
-			]
+			
 		},
 		"instantiations": {
 			"patterns": [
@@ -106,7 +169,7 @@
 				},
 				{
 					"name": "entity.name.type.finx",
-					"match": "(?<=new\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\s*\\()"
+					"match": "(?<=new\\s+)\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\()"
 				}
 			]
 		},
@@ -117,7 +180,11 @@
 					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\.)"
 				},
 				{
-					"begin": "(?<=\\b[A-Za-z_][A-Za-z0-9_]*\\s*)\\.\\b[A-Za-z_][A-Za-z0-9_]*\\b",
+					"name": "entity.name.function.finx",
+					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b(?=\\()"
+				},
+				{
+					"begin": "(?<=\\b[A-Za-z_][A-Za-z0-9_]*)\\.\\b[A-Za-z_][A-Za-z0-9_]*\\b",
 					"end": "\\(",
 					"beginCaptures": {
 						"0": {
